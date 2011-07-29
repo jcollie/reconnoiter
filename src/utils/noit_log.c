@@ -219,7 +219,7 @@ posix_logio_rename(noit_log_stream_t ls, const char *name) {
   if(lock) pthread_rwlock_rdlock(lock);
   rv = rename(ls->path, name);
   if(lock) pthread_rwlock_unlock(lock);
-  return -1;
+  return rv;
 }
 static logops_t posix_logio_ops = {
   posix_logio_open,
