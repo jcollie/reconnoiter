@@ -103,11 +103,11 @@ int noit_watchdog_prefork_init() {
 int noit_monitored_child_pid = -1;
 
 void run_glider(int pid) {
-  char cmd[1024], unused;
+  char cmd[1024];
   if(glider_path) {
     snprintf(cmd, sizeof(cmd), "%s %d > %s/%s.%d.trc",
              glider_path, pid, trace_dir, appname, pid);
-    unused = system(cmd);
+    if (system(cmd)) {}
   }
 }
 
