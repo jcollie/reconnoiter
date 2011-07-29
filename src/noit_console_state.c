@@ -512,11 +512,11 @@ noit_console_state_t *
 noit_console_state_initial() {
   static noit_console_state_t *_top_level_state = NULL;
   if(!_top_level_state) {
-    static noit_console_state_t *no_state, *show_state, *evdeb;
+    static noit_console_state_t *show_state, *evdeb;
     _top_level_state = noit_console_state_alloc();
     noit_console_state_add_cmd(_top_level_state, &console_command_exit);
     show_state = noit_console_mksubdelegate(_top_level_state, "show");
-    no_state = noit_console_mksubdelegate(_top_level_state, "no");
+    (void) noit_console_mksubdelegate(_top_level_state, "no");
 
     noit_console_state_add_cmd(_top_level_state, &console_command_shutdown);
     noit_console_state_add_cmd(_top_level_state, &console_command_restart);
