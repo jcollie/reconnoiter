@@ -64,6 +64,7 @@ noit_check_log_bundle_compress_b64(noit_compression_type_t ctype,
       }
       break;
     case NOIT_COMPRESS_NONE:
+    default:
       // Or don't
       dlen = (uLong)len_in;
       compbuff = (char *)buf_in;
