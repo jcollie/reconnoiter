@@ -175,6 +175,7 @@ AC_CHECK_LIB(posix4, sem_wait, , )
 AC_CHECK_LIB(pthread, pthread_create, , )
 AC_CHECK_LIB(protobuf-c, protobuf_c_message_get_packed_size, ,
              [AC_MSG_ERROR(libprotobuf-c required)])
+AC_CHECK_LIB(dl, dlopen, , [AC_MSG_ERROR(*** dl is required ***)])
 
 AC_CHECK_FUNC(uuid_generate, , [
   AC_MSG_WARN([uuid_generate not available])
