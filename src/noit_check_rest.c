@@ -45,7 +45,7 @@
 #include "noit_conf_private.h"
 #include "noit_filters.h"
 
-#define FAIL(a) do { error = (a); goto error; } while(0)
+#define FAIL(a) do { if (a) {}; goto error; } while(0)
 
 #define NODE_CONTENT(parent, k, v) do { \
   xmlNodePtr tmp; \
@@ -418,7 +418,6 @@ rest_delete_check(noit_http_rest_closure_t *restc,
   xmlNodePtr node;
   uuid_t checkid;
   noit_check_t *check;
-  const char *error;
   char xpath[1024], *uuid_conf;
   int rv, cnt, error_code = 500;
   noit_boolean exists = noit_false;
