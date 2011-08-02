@@ -18,38 +18,38 @@ OBJS=noit_hash.o noit_skiplist.o noit_log.o noit_sem.o noit_str.o \
 all:	libnoit_utils.a
 
 @DTRACEOBJ@:	$(OBJS)
-	@-test -n "@DTRACE@" && \
+	-test -n "@DTRACE@" && \
 	@DTRACE@ @DTRACEFLAGS@ -G -s dtrace_probes.d -o @DTRACEOBJ@ $(OBJS)
 
 noit_log.o:	@DTRACEHDR@
 
 @DTRACEHDR@:	dtrace_probes.d
-	@-test -n "@DTRACE@" && @DTRACE@ -h -s dtrace_probes.d
+	-test -n "@DTRACE@" && @DTRACE@ -h -s dtrace_probes.d
 
 libnoit_utils.a:	$(OBJS) @DTRACEOBJ@
-	@rm -f $@
-	@$(AR) cq $@ $(OBJS) @DTRACEOBJ@
+	rm -f $@
+	$(AR) cq $@ $(OBJS) @DTRACEOBJ@
 	@echo "- archiving $@"
-	@$(RANLIB) $@
+	$(RANLIB) $@
 
 noit_atomic_sol_sparcv8plus.o:	noit_atomic_sol.s
-	@as -P -xarch=v8plus -o $@ noit_atomic_sol.s
+	as -P -xarch=v8plus -o $@ noit_atomic_sol.s
 	@echo "- assembling $@"
 
 noit_atomic_sol_sparcv9.o:	noit_atomic_sol.s
-	@as -P -xarch=v9 -o $@ noit_atomic_sol.s
+	as -P -xarch=v9 -o $@ noit_atomic_sol.s
 	@echo "- assembling $@"
 
 noit_atomic_sol_x86_32.o:	noit_atomic_sol.s
-	@as -P -o $@ noit_atomic_sol.s
+	as -P -o $@ noit_atomic_sol.s
 	@echo "- assembling $@"
 
 noit_atomic_sol_x86_64.o:	noit_atomic_sol.s
-	@as -P -xarch=generic64 -o $@ noit_atomic_sol.s
+	as -P -xarch=generic64 -o $@ noit_atomic_sol.s
 	@echo "- assembling $@"
 
 .c.o:
-	@$(CC) $(CPPFLAGS) $(CFLAGS) -c $<
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c $<
 	@echo "- compiling $<"
 
 clean:

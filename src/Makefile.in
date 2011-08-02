@@ -96,41 +96,41 @@ STRATCON_LIB_FILES=udns/libudns.o noitedit/libnoitedit.a eventer/libeventer.a \
 all:	$(NOIT_LIBS) $(STRATCON_LIBS) $(TARGETS) java-bits make-modules make-man
 
 make-man:
-	@(cd man && $(MAKE) -s)
+	(cd man && $(MAKE))
 
 lua/liblua.lo:
 	@echo "- building lua bits"
-	@(cd lua && $(MAKE) -s liblua.lo)
+	(cd lua && $(MAKE) liblua.lo)
 
 make-modules:	lua/liblua.lo
-	@for dir in $(MODDIR) ; do \
-		(cd $$dir && $(MAKE) -s) ; \
+	for dir in $(MODDIR) ; do \
+		(cd $$dir && $(MAKE)) ; \
 	done
 
 java-bits:
-	@-test -n "@JAVAPARTS@" && (cd java && $(MAKE) -s)
+	-test -n "@JAVAPARTS@" && (cd java && $(MAKE))
 
 libjlog:
-	@(cd jlog && $(MAKE) -s libjlog.a)
+	(cd jlog && $(MAKE) libjlog.a)
 
 jlog/jlogctl:
 	@echo "- building jlogctl"
-	@(cd jlog && $(MAKE) -s jlogctl)
+	(cd jlog && $(MAKE) jlogctl)
 
 libudns:
-	@(cd udns && $(MAKE) -s libudns.o)
+	(cd udns && $(MAKE) libudns.o)
 
 libnoitedit:
-	@(cd noitedit && $(MAKE) -s libnoitedit.a)
+	(cd noitedit && $(MAKE) libnoitedit.a)
 
 libeventer:
-	@(cd eventer && $(MAKE) -s libeventer.a)
+	(cd eventer && $(MAKE) libeventer.a)
 
 libnoit_utils:
-	@(cd utils && $(MAKE) -s libnoit_utils.a)
+	(cd utils && $(MAKE) libnoit_utils.a)
 
 libnoitjson:
-	@(cd json-lib && $(MAKE) -s libnoitjson.a)
+	(cd json-lib && $(MAKE) libnoitjson.a)
 
 jlog/libjlog.a:	libjlog
 udns/libudns.o:	libudns
@@ -142,7 +142,7 @@ json-lib/libnoitjson.a:	libnoitjson
 .PHONY:	noit_version.h
 
 noit_version.h:
-	@$(top_srcdir)/buildtools/mkversion.sh noit_version.h
+	$(top_srcdir)/buildtools/mkversion.sh noit_version.h
 
 man/noitd.usage.h:	make-man
 
@@ -154,7 +154,7 @@ stratcond.o:	man/stratcond.usage.h
 
 noitd:	$(NOIT_OBJS) $(NOIT_LIB_FILES) man/noitd.usage.h
 	@echo "- linking $@"
-	@$(CC) -o $@ $(NOIT_OBJS) \
+	$(CC) -o $@ $(NOIT_OBJS) \
 		udns/libudns.o \
 		$(LDFLAGS) \
 		$(WHOLE_ARCHIVE) \
@@ -168,7 +168,7 @@ noitd:	$(NOIT_OBJS) $(NOIT_LIB_FILES) man/noitd.usage.h
 
 stratcond:	$(STRATCON_OBJS) $(STRATCON_LIB_FILES)
 	@echo "- linking $@"
-	@$(CC) -o $@ $(STRATCON_OBJS) \
+	$(CC) -o $@ $(STRATCON_OBJS) \
 		udns/libudns.o \
 		$(LDFLAGS) \
 		$(WHOLE_ARCHIVE) \
@@ -181,25 +181,25 @@ stratcond:	$(STRATCON_OBJS) $(STRATCON_LIB_FILES)
 		$(LIBS)
 
 stratcon_datastore.o:	stratcon_datastore.c
-	@$(CC) $(CPPFLAGS) $(PGCFLAGS) $(CFLAGS) -c $<
+	$(CC) $(CPPFLAGS) $(PGCFLAGS) $(CFLAGS) -c $<
 	@echo "- compiling $<"
 
 .c.o:
-	@$(CC) $(CPPFLAGS) $(CFLAGS) -c $<
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c $<
 	@echo "- compiling $<"
 
 noit_module.o:	module-online.h
 
 module-online.h:	modules/module-online.xsl
 	@echo "- making module-online.h (StyleSheet include)"
-	@$(XML2H) helpStyleXML < modules/module-online.xsl > $@
+	$(XML2H) helpStyleXML < modules/module-online.xsl > $@
 
 noit_tokenizer.c:
-	@re2c -o $@ noit_tokenizer.re
+	re2c -o $@ noit_tokenizer.re
 	@echo "- re2c noit_tokenizer.re"
 
 test-noit.conf:	noit.conf.in Makefile
-	@sed -e "s^%sysconfdir%^`pwd`^g;" \
+	sed -e "s^%sysconfdir%^`pwd`^g;" \
 		-e "s^%modulesdir%^`pwd`/modules^g;" \
 		-e "s^%modulesluadir%^`pwd`/modules-lua^g;" \
 		-e "s^%PKIPREFIX%^../test/test-^g;" < \
@@ -207,7 +207,7 @@ test-noit.conf:	noit.conf.in Makefile
 		test-noit.conf
 
 noit.conf:	noit.conf.in Makefile
-	@sed -e "s^%sysconfdir%^$(sysconfdir)^g;" \
+	sed -e "s^%sysconfdir%^$(sysconfdir)^g;" \
 		-e "s^%modulesdir%^$(MODULES_DIR)^g;" \
 		-e "s^%modulesluadir%^$(MODULES_DIR)^g;" \
 		-e "s^%PKIPREFIX%^$${PKIPREFIX}^g;" < \
@@ -215,7 +215,7 @@ noit.conf:	noit.conf.in Makefile
 		noit.conf
 
 test-stratcon.conf:	stratcon.conf.in Makefile
-	@sed -e "s^%sysconfdir%^`pwd`^g;" \
+	sed -e "s^%sysconfdir%^`pwd`^g;" \
 		-e "s^%modulesdir%^`pwd`/modules^g;" \
 		-e "s^%modulesluadir%^`pwd`/modules-lua^g;" \
 		-e "s^%iepbindir%^`pwd`/java^g;" \
@@ -225,7 +225,7 @@ test-stratcon.conf:	stratcon.conf.in Makefile
 		test-stratcon.conf
 
 stratcon.conf:	stratcon.conf.in Makefile
-	@sed -e "s^%sysconfdir%^$(sysconfdir)^g;" \
+	sed -e "s^%sysconfdir%^$(sysconfdir)^g;" \
 		-e "s^%modulesdir%^$(MODULES_DIR)^g;" \
 		-e "s^%modulesluadir%^$(MODULES_DIR)^g;" \
 		-e "s^%iepbindir%^$(bindir)^g;" \

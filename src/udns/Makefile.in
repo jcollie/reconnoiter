@@ -79,20 +79,20 @@ staticlib: $(LIB)
 $(LIB): $(OBJS)
 	-rm -f $@
 	@echo "- linking $@"
-	@$(AR) rv $@ $(OBJS)
+	$(AR) rv $@ $(OBJS)
 
 libudns.o:	$(OBJS)
 	@echo "- linking libudns.o"
-	@ld -r -o $@ $(OBJS)
+	ld -r -o $@ $(OBJS)
 
 .c.o:
 	@echo "- compiling $<"
-	@$(CC) $(CPPFLAGS) $(CFLAGS) $(CDEFS) -c $<
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(CDEFS) -c $<
 
 # udns_codes.c is generated from udns.h
 udns_codes.c: udns.h
 	@echo Generating $@
-	@set -e; exec >$@.tmp; \
+	set -e; exec >$@.tmp; \
 	set T type C class R rcode; \
 	echo "/* Automatically generated. */"; \
 	echo "#include \"udns.h\""; \
@@ -124,7 +124,7 @@ udns_codes.c: udns.h
 	 echo "}"; \
 	 shift 2; \
 	done
-	@mv $@.tmp $@
+	mv $@.tmp $@
 
 udns.3.html: udns.3
 	groff -man -Thtml udns.3 > $@.tmp
@@ -149,8 +149,8 @@ depend dep deps: $(SRCS) $(USRC)
 	@echo Generating deps for:
 	@echo \ $(SRCS)
 	@echo \ $(USRCS)
-	@sed '/^# depend/q' Makefile.in > Makefile.tmp
-	@set -e; \
+	sed '/^# depend/q' Makefile.in > Makefile.tmp
+	set -e; \
 	for f in $(SRCS) $(USRCS); do \
 	 echo $${f%.c}.o $${f%.c}.lo: $$f \
 	  `sed -n 's/^#[ 	]*include[ 	]*"\(.*\)".*/\1/p' $$f`; \

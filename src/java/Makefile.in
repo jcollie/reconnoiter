@@ -93,20 +93,20 @@ J_SUPPORT=lib/log4j-1.2.15.jar \
 	lib/commons-cli-1.1.jar lib/postgresql-8.3-604.jdbc3.jar
 
 all:	reconnoiter.jar jezebel.jar
-	@chmod 755 run-iep.sh
-	@chmod 755 jezebel
+	chmod 755 run-iep.sh
+	chmod 755 jezebel
 
 reconnoiter.jar:	$(R_JAVA)
 	@echo "- $@ compiling files"
-	@$(JAVAC) -Xlint:unchecked -g -cp `echo $(R_SUPPORT) | sed -e 's/ /:/g;'` $(R_JAVA)
+	$(JAVAC) -Xlint:unchecked -g -cp `echo $(R_SUPPORT) | sed -e 's/ /:/g;'` $(R_JAVA)
 	@echo "- creating $@"
-	@$(JAR) cf $@ $(R_CLASS)
+	$(JAR) cf $@ $(R_CLASS)
 
 jezebel.jar:	$(J_JAVA)
 	@echo "- $@ compiling files"
-	@$(JAVAC) -Xlint:unchecked -g -cp `echo $(J_SUPPORT) | sed -e 's/ /:/g;'` $(J_JAVA)
+	$(JAVAC) -Xlint:unchecked -g -cp `echo $(J_SUPPORT) | sed -e 's/ /:/g;'` $(J_JAVA)
 	@echo "- creating $@"
-	@$(JAR) cf $@ $(J_CLASS)
+	$(JAR) cf $@ $(J_CLASS)
 
 install-dirs:	all
 	$(top_srcdir)/buildtools/mkinstalldirs $(DESTDIR)$(javalibdir)

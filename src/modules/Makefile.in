@@ -35,66 +35,66 @@ SMODULES=stomp_driver.@MODULEEXT@ postgres_ingestor.@MODULEEXT@ \
 all:	$(MODULES) $(SMODULES) test_abort.@MODULEEXT@
 
 .xml.xmlh:
-	@$(XML2H) `echo $< | sed -e 's/\.xml$$//;'`_xml_description < $< > $@
+	$(XML2H) `echo $< | sed -e 's/\.xml$$//;'`_xml_description < $< > $@
 
 selfcheck.lo:	selfcheck.xmlh
 
 lua.@MODULEEXT@:	lua.lo lua_noit.lo lua_lpack.lo lua_dns.lo
-	@$(MODULELD) $(LDFLAGS) -o $@ lua.lo lua_noit.lo lua_dns.lo lua_lpack.lo ../lua/liblua.lo
+	$(MODULELD) $(LDFLAGS) -o $@ lua.lo lua_noit.lo lua_dns.lo lua_lpack.lo ../lua/liblua.lo
 	@echo "- linking $@"
 
 lua.lo:	lua.c lua.xmlh
-	@$(CC) $(CPPFLAGS) $(SHCFLAGS) -I$(top_srcdir)/src/lua/src -c lua.c -o $@
+	$(CC) $(CPPFLAGS) $(SHCFLAGS) -I$(top_srcdir)/src/lua/src -c lua.c -o $@
 	@echo "- compiling $<"
 
 lua_noit.lo:	lua_noit.c
-	@$(CC) $(CPPFLAGS) $(SHCFLAGS) -I$(top_srcdir)/src/lua/src -c lua_noit.c -o $@
+	$(CC) $(CPPFLAGS) $(SHCFLAGS) -I$(top_srcdir)/src/lua/src -c lua_noit.c -o $@
 	@echo "- compiling $<"
 
 lua_dns.lo:	lua_dns.c
-	@$(CC) $(CPPFLAGS) $(SHCFLAGS) -I$(top_srcdir)/src/lua/src -c lua_dns.c -o $@
+	$(CC) $(CPPFLAGS) $(SHCFLAGS) -I$(top_srcdir)/src/lua/src -c lua_dns.c -o $@
 	@echo "- compiling $<"
 
 lua_lpack.lo:	lua_lpack.c
-	@$(CC) $(CPPFLAGS) $(SHCFLAGS) -I$(top_srcdir)/src/lua/src -c lua_lpack.c -o $@
+	$(CC) $(CPPFLAGS) $(SHCFLAGS) -I$(top_srcdir)/src/lua/src -c lua_lpack.c -o $@
 	@echo "- compiling $<"
 
 postgres.@MODULEEXT@:	postgres.lo
-	@$(MODULELD) $(LDFLAGS) -o $@ postgres.lo $(PGLIBS) -lz -lssl -lcrypto
+	$(MODULELD) $(LDFLAGS) -o $@ postgres.lo $(PGLIBS) -lz -lssl -lcrypto
 	@echo "- linking $@"
 
 postgres.lo:	postgres.c postgres.xmlh
-	@$(CC) $(CPPFLAGS) $(SHCFLAGS) $(PGCFLAGS) -c $< -o $@
+	$(CC) $(CPPFLAGS) $(SHCFLAGS) $(PGCFLAGS) -c $< -o $@
 	@echo "- compiling $<"
 
 postgres_ingestor.@MODULEEXT@:	postgres_ingestor.lo
-	@$(MODULELD) $(LDFLAGS) -o $@ postgres_ingestor.lo $(PGLIBS) -lz -lssl -lcrypto
+	$(MODULELD) $(LDFLAGS) -o $@ postgres_ingestor.lo $(PGLIBS) -lz -lssl -lcrypto
 	@echo "- linking $@"
 
 postgres_ingestor.lo: postgres_ingestor.c postgres_ingestor.xmlh
-	@$(CC) $(CPPFLAGS) $(SHCFLAGS) $(PGCFLAGS) -c $< -o $@
+	$(CC) $(CPPFLAGS) $(SHCFLAGS) $(PGCFLAGS) -c $< -o $@
 	@echo "- compiling $<"
 
 handoff_ingestor.lo:	handoff_ingestor.c handoff_ingestor.xmlh
 
 handoff_ingestor.@MODULEEXT@:	handoff_ingestor.lo
-	@$(MODULELD) $(LDFLAGS) -o $@ handoff_ingestor.lo
+	$(MODULELD) $(LDFLAGS) -o $@ handoff_ingestor.lo
 	@echo "- linking $@"
 
 handoff_ingestor.lo: handoff_ingestor.c
-	@$(CC) $(CPPFLAGS) $(SHCFLAGS) $(PGCFLAGS) -c $< -o $@
+	$(CC) $(CPPFLAGS) $(SHCFLAGS) $(PGCFLAGS) -c $< -o $@
 	@echo "- compiling $<"
 
 stomp_driver.lo:	stomp_driver.c stomp_driver.xmlh
-	@$(CC) $(CPPFLAGS) $(SHCFLAGS) @APRCFLAGS@ -c $< -o $@
+	$(CC) $(CPPFLAGS) $(SHCFLAGS) @APRCFLAGS@ -c $< -o $@
 	@echo "- compiling $<"
 
 libstomp.lo:	libstomp.c
-	@$(CC) $(CPPFLAGS) $(SHCFLAGS) @APRCFLAGS@ -c $< -o $@
+	$(CC) $(CPPFLAGS) $(SHCFLAGS) @APRCFLAGS@ -c $< -o $@
 	@echo "- compiling $<"
 
 stomp_driver.@MODULEEXT@:	stomp_driver.lo libstomp.lo
-	@$(MODULELD) $(LDFLAGS) -o $@ stomp_driver.lo libstomp.lo @APRLIBS@
+	$(MODULELD) $(LDFLAGS) -o $@ stomp_driver.lo libstomp.lo @APRLIBS@
 	@echo "- linking $@"
 
 RABBITMQ_DRIVER_OBJS=rabbitmq_driver.lo \
@@ -106,45 +106,45 @@ RABBITMQ_DRIVER_OBJS=rabbitmq_driver.lo \
 rabbitmq_driver.lo:	rabbitmq_driver.c rabbitmq_driver.xmlh
 
 rabbitmq_driver.@MODULEEXT@:    $(RABBITMQ_DRIVER_OBJS)
-	@$(MODULELD) $(LDFLAGS) -o $@ $(RABBITMQ_DRIVER_OBJS)
+	$(MODULELD) $(LDFLAGS) -o $@ $(RABBITMQ_DRIVER_OBJS)
 	@echo "- linking $@"
 
 mysql.@MODULEEXT@:	mysql.lo
-	@$(MODULELD) $(LDFLAGS) -o $@ mysql.lo $(MYLIBS)
+	$(MODULELD) $(LDFLAGS) -o $@ mysql.lo $(MYLIBS)
 	@echo "- linking $@"
 
 mysql.lo:	mysql.c mysql.xmlh
-	@$(CC) $(CPPFLAGS) $(SHCFLAGS) $(MYCFLAGS) -c $< -o $@
+	$(CC) $(CPPFLAGS) $(SHCFLAGS) $(MYCFLAGS) -c $< -o $@
 	@echo "- compiling $<"
 
 dns.@MODULEEXT@:	dns.lo
-	@$(MODULELD) $(LDFLAGS) -o $@ dns.lo
+	$(MODULELD) $(LDFLAGS) -o $@ dns.lo
 	@echo "- linking $@"
 
 dns.lo:	dns.c dns.xmlh
-	@$(CC) $(CPPFLAGS) $(SHCFLAGS) -c $< -o $@
+	$(CC) $(CPPFLAGS) $(SHCFLAGS) -c $< -o $@
 	@echo "- compiling $<"
 
 snmp.@MODULEEXT@:	snmp.lo
-	@$(MODULELD) $(LDFLAGS) -o $@ snmp.lo -lnetsnmp
+	$(MODULELD) $(LDFLAGS) -o $@ snmp.lo -lnetsnmp
 	@echo "- linking $@"
 
 ssh2.@MODULEEXT@:	ssh2.lo
-	@$(MODULELD) $(LDFLAGS) -o $@ ssh2.lo -lssh2
+	$(MODULELD) $(LDFLAGS) -o $@ ssh2.lo -lssh2
 	@echo "- linking $@"
 
 httptrap.@MODULEEXT@:	httptrap.lo
-	@$(MODULELD) $(LDFLAGS) -o $@ httptrap.lo
+	$(MODULELD) $(LDFLAGS) -o $@ httptrap.lo
 	@echo "- linking $@"
 
 httptrap.lo:	httptrap.xmlh
 
 collectd.@MODULEEXT@:	collectd.lo
-	@$(MODULELD) $(LDFLAGS) -o $@ collectd.lo -lssl 
+	$(MODULELD) $(LDFLAGS) -o $@ collectd.lo -lssl 
 	@echo "- linking $@"
 
 collectd.lo:	collectd.c collectd.xmlh
-	@$(CC) $(CPPFLAGS) $(CFLAGS) $(SHCFLAGS) -c collectd.c -o $@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(SHCFLAGS) -c collectd.c -o $@
 	@echo "- compiling $<"
 
 ssh2.lo:	ssh2.xmlh
@@ -152,27 +152,27 @@ ssh2.lo:	ssh2.xmlh
 ping_icmp.lo:	ping_icmp.xmlh
 
 ping_icmp.@MODULEEXT@:	ping_icmp.lo
-	@$(MODULELD) $(LDFLAGS) -o $@ $<
+	$(MODULELD) $(LDFLAGS) -o $@ $<
 	@echo "- linking $@"
 
 external.lo:	external.xmlh
 
 external.@MODULEEXT@:	external.lo external_proc.lo
-	@$(MODULELD) $(LDFLAGS) -o $@ external.lo external_proc.lo
+	$(MODULELD) $(LDFLAGS) -o $@ external.lo external_proc.lo
 	@echo "- linking $@"
 
 test_abort.@MODULEEXT@:	test_abort.lo
-	@$(MODULELD) $(LDFLAGS) -o $@ $<
+	$(MODULELD) $(LDFLAGS) -o $@ $<
 	@echo "- linking $@"
 
 .lo.@MODULEEXT@:
-	@$(MODULELD) $(LDFLAGS) -o $@ $<
+	$(MODULELD) $(LDFLAGS) -o $@ $<
 	@echo "- linking $@"
 
 snmp.lo:	snmp.xmlh snmptrap.xmlh
 
 .c.lo:
-	@$(CC) $(CPPFLAGS) $(SHCFLAGS) -c $< -o $@
+	$(CC) $(CPPFLAGS) $(SHCFLAGS) -c $< -o $@
 	@echo "- compiling $<"
 
 alldocs:

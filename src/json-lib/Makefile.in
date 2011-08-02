@@ -16,13 +16,13 @@ OBJS=arraylist.o debug.o json_object.o json_tokener.o json_util.o \
 all:	libnoitjson.a
 
 libnoitjson.a:	$(OBJS)
-	@rm -f $@
-	@$(AR) cq $@ $(OBJS)
+	rm -f $@
+	$(AR) cq $@ $(OBJS)
 	@echo "- archiving $@"
-	@$(RANLIB) $@
+	$(RANLIB) $@
 
 .c.o:
-	@$(CC) $(CPPFLAGS) $(CFLAGS) -c $<
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c $<
 	@echo "- compiling $<"
 
 clean:
