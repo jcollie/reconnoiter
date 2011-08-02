@@ -191,7 +191,7 @@ int noit_watchdog_child_eventer_heartbeat() {
 
   assert(__eventer);
 
- /* Setup our hearbeat */
+ /* Setup our heartbeat */
   e = eventer_alloc();
   e->mask = EVENTER_RECURRENT;
   e->callback = watchdog_tick;

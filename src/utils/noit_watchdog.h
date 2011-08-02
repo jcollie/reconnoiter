@@ -55,7 +55,7 @@ API_EXPORT(int)
     \return Returns on program termination.
 .
     
-    noit_watchdog_start_child will fork and run the specified function in the child process.  The parent will watch.  The child process must initialize the eventer system and then call noit_watchdog_child_hearbeat to let the parent know it is alive.  If the eventer system is being used to drive the child process, noit_watchdog_child_eventer_heartbeat may be called once after the eventer is initalized.  This will induce a regular heartbeat.
+    noit_watchdog_start_child will fork and run the specified function in the child process.  The parent will watch.  The child process must initialize the eventer system and then call noit_watchdog_child_heartbeat to let the parent know it is alive.  If the eventer system is being used to drive the child process, noit_watchdog_child_eventer_heartbeat may be called once after the eventer is initalized.  This will induce a regular heartbeat.
  */
 API_EXPORT(int)
   noit_watchdog_start_child(const char *app, int (*func)(), int timeout);

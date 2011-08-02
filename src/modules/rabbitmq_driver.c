@@ -151,7 +151,7 @@ static void noit_rabbitmq_read_frame(struct amqp_driver *dr) {
       if(rv > 0) {
         if(f.frame_type == AMQP_FRAME_HEARTBEAT) {
           BUMPSTAT(inbound_heartbeats);
-          noitL(noit_debug, "amqp <- hearbeat\n");
+          noitL(noit_debug, "amqp <- heartbeat\n");
         }
         else if(f.frame_type == AMQP_FRAME_METHOD) {
           BUMPSTAT(inbound_methods);
@@ -191,7 +191,7 @@ static void noit_rabbitmq_heartbeat(struct amqp_driver *dr) {
     f.frame_type = AMQP_FRAME_HEARTBEAT;
     f.channel = 0;
     amqp_send_frame(dr->connection, &f);
-    noitL(noit_debug, "amqp -> hearbeat\n");
+    noitL(noit_debug, "amqp -> heartbeat\n");
     memcpy(&dr->last_hb, &n, sizeof(n));
   }
 }
