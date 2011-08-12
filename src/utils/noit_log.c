@@ -437,12 +437,11 @@ jlog_logio_reopen(noit_log_stream_t ls) {
 }
 static void
 noit_log_jlog_err(void *ctx, const char *format, ...) {
-  int rv;
   struct timeval now;
   va_list arg;
   va_start(arg, format);
   gettimeofday(&now, NULL);
-  rv = noit_vlog(noit_error, &now, "jlog.c", 0, format, arg);
+  (void) noit_vlog(noit_error, &now, "jlog.c", 0, format, arg);
   va_end(arg);
 }
 static int
