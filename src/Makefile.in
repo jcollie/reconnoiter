@@ -32,6 +32,10 @@ MODULES_DIR=@MODULES_DIR@
 WHOLE_ARCHIVE=@WHOLE_ARCHIVE@
 NOWHOLE_ARCHIVE=@NOWHOLE_ARCHIVE@
 
+DTRACEOBJ=@DTRACEOBJ@
+NOITD_DTRACEOBJ=$(DTRACEOBJ:%dtrace_stub.o=noitd_%dtrace_stub.o)
+STRATCOND_DTRACEOBJ=$(DTRACEOBJ:%dtrace_stub.o=stratcond_%dtrace_stub.o)
+
 TARGETS=noitd stratcond noit.conf test-noit.conf stratcon.conf test-stratcon.conf \
 	jlog/jlogctl
 
@@ -152,10 +156,26 @@ man/stratcond.usage.h:	make-man
 noitd.o:	man/noitd.usage.h
 stratcond.o:	man/stratcond.usage.h
 
-noitd:	$(NOIT_OBJS) $(NOIT_LIB_FILES) man/noitd.usage.h
+stratcon_jlog_streamer.o:	@DTRACEHDR@
+noit_check_tools.o:	@DTRACEHDR@
+noit_check.o:	@DTRACEHDR@
+
+stratcond_@DTRACEOBJ@:    $(STRATCON_OBJS)
+	@-test -n "@DTRACE@" && \
+	@DTRACE@ @DTRACEFLAGS@ -Z -G -s dtrace_probes.d -o stratcond_@DTRACEOBJ@ $(STRATCON_OBJS)
+
+noitd_@DTRACEOBJ@:    $(STRATCON_OBJS)
+	@-test -n "@DTRACE@" && \
+	@DTRACE@ @DTRACEFLAGS@ -Z -G -s dtrace_probes.d -o noitd_@DTRACEOBJ@ $(NOIT_OBJS)
+
+@DTRACEHDR@:    dtrace_probes.d
+	@-test -n "@DTRACE@" && @DTRACE@ -h -s dtrace_probes.d
+
+noitd:	$(NOIT_OBJS) $(NOIT_LIB_FILES) man/noitd.usage.h $(NOITD_DTRACEOBJ)
 	@echo "- linking $@"
 	$(CC) -o $@ $(NOIT_OBJS) \
 		udns/libudns.o \
+		$(NOITD_DTRACEOBJ) \
 		$(LDFLAGS) \
 		$(WHOLE_ARCHIVE) \
 		-Leventer -leventer \
@@ -166,10 +186,11 @@ noitd:	$(NOIT_OBJS) $(NOIT_LIB_FILES) man/noitd.usage.h
 		$(NOWHOLE_ARCHIVE) \
 		$(LIBS)
 
-stratcond:	$(STRATCON_OBJS) $(STRATCON_LIB_FILES)
+stratcond:	$(STRATCON_OBJS) $(STRATCON_LIB_FILES) $(STRATCOND_DTRACEOBJ)
 	@echo "- linking $@"
 	$(CC) -o $@ $(STRATCON_OBJS) \
 		udns/libudns.o \
+		$(STRATCOND_DTRACEOBJ) \
 		$(LDFLAGS) \
 		$(WHOLE_ARCHIVE) \
 		-Leventer -leventer \
