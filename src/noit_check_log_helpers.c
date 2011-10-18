@@ -131,11 +131,15 @@ noit_check_log_bundle_decompress_b64(noit_compression_type_t ctype,
       // Or don't
       rawlen = (uLong)dlen;
       rawbuff = compbuff;
-      if(rawlen != len_out) return -1;
+      if(rawlen != len_out) {
+        if(compbuff) free(compbuff);
+        return -1;
+      }
       memcpy(buf_out, rawbuff, rawlen);
       break;
   }
 
+  if(compbuff) free(compbuff);
   return 0;
 }
 
@@ -155,7 +159,8 @@ noit_stats_snprint_metric_value(char *b, int l, metric_t *m) {
         rv = snprintf(b, l, "%lld", (long long int)*(m->metric_value.l)); break;
       case METRIC_UINT64:
         rv = snprintf(b, l, "%llu",
-                      (long long unsigned int)*(m->metric_value.L)); break;      case METRIC_DOUBLE:
+                      (long long unsigned int)*(m->metric_value.L)); break;
+      case METRIC_DOUBLE:
         rv = snprintf(b, l, "%.12e", *(m->metric_value.n)); break;
       case METRIC_STRING:
         rv = snprintf(b, l, "%s", m->metric_value.s); break;
@@ -310,5 +315,5 @@ noit_check_log_b_to_sm(const char *line, int len, char ***out) {
  good_line:
   if(bundle) bundle__free_unpacked(bundle, &protobuf_c_system_allocator);
   if(raw_protobuf) free(raw_protobuf);
-  return cnt;
+  return cnt + has_status;
 }
