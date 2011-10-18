@@ -240,7 +240,7 @@ void
 noit_connection_schedule_reattempt(noit_connection_ctx_t *ctx,
                                    struct timeval *now) {
   struct timeval __now, interval;
-  const char *v, *feedtype, *cn_expected;
+  const char *v, *feedtype __attribute__ ((unused)), *cn_expected __attribute__ ((unused));
   u_int32_t min_interval = 1000, max_interval = 8000;
 
   noit_connection_disable_timeout(ctx);
@@ -391,7 +391,7 @@ stratcon_jlog_recv_handler(eventer_t e, int mask, void *closure,
   jlog_streamer_ctx_t dummy;
   int len;
   jlog_id n_chkpt;
-  const char *cn_expected, *feedtype;
+  const char *cn_expected __attribute__ ((unused)), *feedtype __attribute__ ((unused));
   GET_EXPECTED_CN(nctx, cn_expected);
   GET_FEEDTYPE(nctx, feedtype);
 
@@ -556,7 +556,7 @@ noit_connection_ssl_upgrade(eventer_t e, int mask, void *closure,
                             struct timeval *now) {
   noit_connection_ctx_t *nctx = closure;
   int rv;
-  const char *error = NULL, *cn_expected, *feedtype;
+  const char *error = NULL, *cn_expected, *feedtype __attribute__ ((unused));
 
   GET_EXPECTED_CN(nctx, cn_expected);
   GET_FEEDTYPE(nctx, feedtype);
@@ -608,7 +608,7 @@ int
 noit_connection_complete_connect(eventer_t e, int mask, void *closure,
                                  struct timeval *now) {
   noit_connection_ctx_t *nctx = closure;
-  const char *cert, *key, *ca, *ciphers, *crl = NULL, *cn_expected, *feedtype;
+  const char *cert, *key, *ca, *ciphers, *crl = NULL, *cn_expected __attribute__ ((unused)), *feedtype __attribute__ ((unused));
   char remote_str[128], tmp_str[128];
   eventer_ssl_ctx_t *sslctx;
   int aerrno, len;
@@ -686,7 +686,7 @@ noit_connection_complete_connect(eventer_t e, int mask, void *closure,
 static void
 noit_connection_initiate_connection(noit_connection_ctx_t *nctx) {
   struct timeval __now;
-  const char *cn_expected, *feedtype;
+  const char *cn_expected __attribute__ ((unused)), *feedtype __attribute__ ((unused));
   eventer_t e;
   int rv, fd = -1;
 #ifdef SO_KEEPALIVE
